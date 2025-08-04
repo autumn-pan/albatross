@@ -1,5 +1,6 @@
 #include "list.h"
 #include <stdio.h>
+#include <stdlib.h>
 
 void init_list(List* list)
 {
@@ -7,7 +8,19 @@ void init_list(List* list)
     list->tail = NULL;
 }
 
-void list_append(List* list, ListNode* node)
+ListNode* create_node(void* value) {
+    ListNode* node = (ListNode*)malloc(sizeof(ListNode));
+    if (!node) {
+        perror("Node allocation failed");
+        exit(EXIT_FAILURE);
+    }
+
+    node->value = value;
+    node->next = NULL;
+    return node;
+}
+
+void list_push(List* list, ListNode* node)
 {
     if(list->head == NULL)
     {
@@ -16,8 +29,8 @@ void list_append(List* list, ListNode* node)
     }
     else
     {
-        list->tail->next = list->tail;
-        list->tail = node;
+        node->next = list->head;
+        list->head = node;
     }
 }
 
@@ -26,4 +39,22 @@ void list_pop_head(List* list)
     ListNode* tmp = list->head->next;
     free(list->head);
     list->head = tmp;
+}
+
+void list_pop(List* list, int index)
+{
+    if(index > list->size)
+    {
+        perror("Node index out of bounds");
+        exit(EXIT_FAILURE);
+    }
+
+    ListNode* tmp = list->head;
+    for(int i = 0; i < index - 1; i++)
+    {
+        tmp = tmp->next; 
+    }
+
+    free(tmp->next);
+    tmp->next = tmp->next->next;
 }

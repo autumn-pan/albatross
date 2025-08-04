@@ -3,10 +3,8 @@
 
 typedef struct
 {
-    ListNode* prev;
     ListNode* next;
     void* value;
-    int index;
 } ListNode;
 
 typedef struct
