@@ -6,6 +6,7 @@ void init_list(List* list)
 {
     list->head = NULL;
     list->tail = NULL;
+    list->size = 0;
 }
 
 ListNode* create_node(void* value) {
@@ -32,6 +33,7 @@ void list_push(List* list, ListNode* node)
         node->next = list->head;
         list->head = node;
     }
+    list->size++;
 }
 
 void list_pop_head(List* list)
@@ -39,6 +41,7 @@ void list_pop_head(List* list)
     ListNode* tmp = list->head->next;
     free(list->head);
     list->head = tmp;
+    list->size--;
 }
 
 void list_pop(List* list, int index)
@@ -57,4 +60,5 @@ void list_pop(List* list, int index)
 
     free(tmp->next);
     tmp->next = tmp->next->next;
+    list->size--;
 }
