@@ -14,6 +14,13 @@ typedef struct
     ListNode* tail;
 } List;
 
+// Initialization functions
 void init_list(List* list);
+ListNode* create_node(void* value);
+
+// List util functions
+void list_push(List* list, ListNode* node);
+void list_pop_head(List* list);
+void list_pop(List* list, int index);
 
 #endif
