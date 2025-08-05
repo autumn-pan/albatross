@@ -1,5 +1,6 @@
 #ifndef TASK_H
 #define TASK_H
+
 #include <stdio.h>
 #include <stdint.h>
 // Task ID is initially set to -1 such that the first task will have ID 0. Task IDs will increment linearly in O(1) time.
@@ -26,5 +27,7 @@ typedef struct tbc
     uint8_t id;
 } TBC;
 
+
+uint32_t* init_stack(void (*task_func)(void), uint32_t* stack);
 
 #endif
