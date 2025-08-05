@@ -1,9 +1,9 @@
 #ifndef LIST_H
 #define LIST_H
 
-typedef struct
+typedef struct listNode
 {
-    ListNode* next;
+    struct listNode* next;
     void* value;
 } ListNode;
 
