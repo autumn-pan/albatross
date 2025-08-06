@@ -1,6 +1,7 @@
 #include "util/list.h"
 #include <stdio.h>
 #include <stdlib.h>
+#include <stdint.h>
 
 void init_list(List* list)
 {
@@ -36,6 +37,21 @@ void list_push(List* list, ListNode* node)
     list->size++;
 }
 
+void list_append(List * list, ListNode* node)
+{
+    if(list->head == NULL)
+    {
+        list->head = node;
+        list->tail = node;
+    }
+    else
+    {
+        list->tail->next = node;
+        list->tail = node;
+    }
+    list->size++;
+}
+
 void list_pop_head(List* list)
 {
     ListNode* tmp = list->head->next;
@@ -61,4 +77,24 @@ void list_pop(List* list, int index)
     free(tmp->next);
     tmp->next = tmp->next->next;
     list->size--;
+}
+
+uint8_t find_node_index(List* list, ListNode* node)
+{
+    ListNode* tmp = list->head;
+
+    uint8_t index = 0;
+    while(tmp != node)
+    {
+        tmp = tmp->next;
+
+        // If not found, return -1
+        if(!tmp)
+            return -1;
+
+        index++;
+    }
+
+    free(tmp);
+    return index;
 }

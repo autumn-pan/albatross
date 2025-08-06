@@ -10,7 +10,7 @@ enum TASK_STATE
 {
     RUNNING,
     BLOCKED,
-    SUSPENDED,
+    SLEEPING,
     READY
 };
 
@@ -22,6 +22,7 @@ typedef struct tbc
 
     uint32_t stack_ptr;
     uint32_t stack_base;
+    enum TASK_STATE state;
 
     uint32_t delay;
     uint8_t id;
