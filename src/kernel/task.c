@@ -3,6 +3,8 @@
 #include <string.h>
 
 #define STACK_SIZE 256
+extern void save_context(uint32_t* context);
+extern void restore_context(uint32_t* context);
 
 TBC* create_tbc(void (*task_func)(void), uint32_t priority)
 {
@@ -63,4 +65,10 @@ uint32_t* init_stack(void (*task_func)(void), uint32_t* stack)
     }
 
     return sp;
+}
+
+void switch_context(TBC* current, TBC* next)
+{
+    save_context(current->stack_ptr);
+    restore_context(next->stack_ptr);
 }
