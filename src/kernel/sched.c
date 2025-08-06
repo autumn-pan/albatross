@@ -18,5 +18,6 @@ uint32_t get_highest_priority()
         return -1; 
     }
 
-    return 31 - __builtin_clz(ready_bitset);
+    return __builtin_clz(ready_bitset);
 }
+
