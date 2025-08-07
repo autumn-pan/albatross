@@ -44,5 +44,6 @@ typedef struct tbc
 
 
 uint32_t* init_stack(void (*task_func)(void), uint32_t* stack);
+void switch_context(TBC* current, TBC* next);
 
 #endif
