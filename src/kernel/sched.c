@@ -86,6 +86,9 @@ void yield()
 
 void sleep(uint32_t time)
 {
+    if(get_highest_priority() == -1)
+        return;
+
     // Set up sleep controller
     running->sleep_controller->init_time = get_ticks();
     running->sleep_controller->sleep_time = time;
@@ -94,3 +97,7 @@ void sleep(uint32_t time)
     switch_task(scheduler_next_task(), SLEEPING);
 }
 
+void add_task()
+{
+
+}
