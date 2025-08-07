@@ -66,6 +66,24 @@ void set_state_queue(TBC* tbc, enum TASK_STATE queue)
     list_append(queue, tbc);
 }
 
+
+void switch_task(TBC* next_task, enum TASK_STATE new_queue)
+{
+    set_state_queue(running, new_queue);
+
+    // Save and change contexts
+    switch_context(running, next_task);
+
+    // If necessary, update ready bitset
+    update_ready_bitset(next_task);
+    running = next_task;
+}
+
+void yield()
+{
+    switch_task(scheduler_next_task, READY);
+}
+
 void sleep(uint32_t time)
 {
     // Set up sleep controller
@@ -73,13 +91,6 @@ void sleep(uint32_t time)
     running->sleep_controller->sleep_time = time;
     running->sleep_controller->remaining_time = time;
 
-    // Mark the running ask as asleep
-    set_state_queue(running, SLEEPING);
-
-    // Provisional solution; will eventually use linked lists to determine next task in advance
-    TBC* next_task = scheduler_next_task();
-    switch_context(running, next_task);
-    // If necessary, update ready bitset
-    update_ready_bitset(next_task);
-    running = next_task;
+    switch_task(scheduler_next_task(), SLEEPING);
 }
+
