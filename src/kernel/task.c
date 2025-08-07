@@ -40,6 +40,8 @@ TBC* create_tbc(void (*task_func)(void), uint32_t priority)
 
     tbc->stack_base = stack;
 
+    tbc->sleep_controller = init_sleep_controller();
+    
     return tbc;
 }
 
@@ -65,6 +67,13 @@ uint32_t* init_stack(void (*task_func)(void), uint32_t* stack)
     }
 
     return sp;
+}
+
+SleepController* init_sleep_controller()
+{
+    SleepController* sleep_controller = (SleepController*)(malloc(sizeof(SleepController)));
+    sleep_controller->asleep = false;
+    return sleep_controller;
 }
 
 void switch_context(TBC* current, TBC* next)
