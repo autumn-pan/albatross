@@ -27,5 +27,5 @@ void switch_task(TBC* next_task, enum TASK_STATE new_queue);
 void yield();
 // Blocks the running task from running for a set amount of time before sending it back to the READY queue
 void sleep(uint32_t time);
-
+void add_task(uint32_t priority, void (*task_func)(void));
 #endif

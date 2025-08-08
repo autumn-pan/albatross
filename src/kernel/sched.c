@@ -2,18 +2,21 @@
 #include "util/list.h"
 #include "kernel/clock.h"
 
+// Bitset functions-- used to configure priority bitset
+// Set any bit to 1
 void add_priority(uint32_t priority) {
     if (priority < 32) {
         ready_bitset |= (1U << priority); 
     }
 }
-
+// Set any bit to 0
 void remove_priority(uint32_t priority) {
     if (priority < 32) {
         ready_bitset &= (0U << priority); 
     }
 }
 
+// FInd the highest priority ready task
 uint32_t get_highest_priority()
 {
     if (ready_bitset == 0) {
@@ -23,9 +26,16 @@ uint32_t get_highest_priority()
     return __builtin_clz(ready_bitset);
 }
 
+
+// Get the next ready task
 TBC* scheduler_next_task()
 {
-    return ready_queue[get_highest_priority()]->head;
+    uint32_t highest_priority = get_highest_priority();
+    if(highest_priority == -1)
+        return NULL;
+
+    // The corresponding list
+    return ready_queue[highest_priority]->head;
 }
 
 // Change the state of a task
@@ -77,17 +87,25 @@ void switch_task(TBC* next_task, enum TASK_STATE new_queue)
     // If necessary, update ready bitset
     update_ready_bitset(next_task);
     running = next_task;
+    current_context = next_task;
 }
 
 void yield()
 {
+    if(get_highest_priority() == -1)
+        return;
+
     switch_task(scheduler_next_task, READY);
 }
 
 void sleep(uint32_t time)
 {
     if(get_highest_priority() == -1)
+    {
+        is_running_task = false;
+        running = NULL;
         return;
+    }
 
     // Set up sleep controller
     running->sleep_controller->init_time = get_ticks();
@@ -109,5 +127,24 @@ void add_task(uint32_t priority, void (*task_func)(void))
             add_priority(tbc->priority);
         }
         return;
+    }
+}
+
+void scheduler_loop()
+{
+    while(1)
+    {
+        if(!is_running_task)
+        {
+            if(get_highest_priority() != -1)
+            {
+                is_ready_task = true;
+                switch_task(current_context, scheduler_next_task());       
+            }
+            else
+            {
+                __asm volatile("wfi");
+            }
+        }
     }
 }
