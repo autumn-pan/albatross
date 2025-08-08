@@ -6,7 +6,7 @@
 extern void save_context(uint32_t* context);
 extern void restore_context(uint32_t* context);
 
-TBC* create_tbc(void (*task_func)(void), uint32_t priority)
+TBC* init_tbc(void (*task_func)(void), uint32_t priority)
 {
     TBC* tbc = (TBC*)(malloc(sizeof(TBC)));
 

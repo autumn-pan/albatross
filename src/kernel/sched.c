@@ -97,7 +97,17 @@ void sleep(uint32_t time)
     switch_task(scheduler_next_task(), SLEEPING);
 }
 
-void add_task()
+void add_task(uint32_t priority, void (*task_func)(void))
 {
-
+    TBC* tbc = init_tbc(task_func, priority);
+    
+    if(ready_queue[get_highest_priority()] == -1)
+    {
+        list_append(ready_queue[tbc->priority], tbc);
+        if(ready_queue[tbc->priority]->size == 1)
+        {
+            add_priority(tbc->priority);
+        }
+        return;
+    }
 }
