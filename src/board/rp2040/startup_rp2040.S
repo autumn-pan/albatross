@@ -75,11 +75,12 @@
     .global Reset_Handler
     .global Default_Handler
 
-    .word _sidata
-    .word _sdata
-    .word _edata
-    .word _sbss
-    .word _ebss
+    .word _start_idata
+    .word _start_data
+    .word _end_data
+    .word _start_bss
+    .word _end_bss
+    .word _initial_sp
 
     .extern Reset_Handler
     .extern HardFault_Handler
@@ -117,8 +118,8 @@
 
 .global bss_zero
 bss_zero:
-    mov R0, _sbss
-    mov R1, _ebss
+    mov R0, _start_bss
+    mov R1, _end_bss
     mov R2, #0
     bl bss_zero_loop
 
