@@ -8,6 +8,7 @@ extern uint32_t _end_bss;
 extern uint32_t initial_sp;   
 
 extern void bss_zero(void);
+extern void cp_flash(void);
 
 int main(void);
 
@@ -16,12 +17,7 @@ void Reset_Handler(void)
     uint32_t *src, *dest;
 
     // Copy from Flash to RAM
-    src = &_start_idata;
-    dest = &_start_data;
-
-    while (dest < &_end_data) 
-        *dest++ = *src++;
-
+    cp_flash();
     // Zero out .bss
     bss_zero();
 

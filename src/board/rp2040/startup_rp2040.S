@@ -4,7 +4,7 @@
 
 
 
-.section isr_vtable, "a"
+.section .isr_vector, "a"
     .align  2
     .word   _stack_ptr
 
@@ -132,4 +132,23 @@ bss_zero_loop:
     b bss_zero_loop
 
 bss_zero_end:   
+    bx lr
+
+.global cp_flash
+cp_flash:
+    mov R0 _start_data
+    mov R1 _end_data
+    mov R2 _start_idata
+
+cp_flash_loop:
+    cmp R0, R1
+    bge cp_flash_end
+
+    str R0, [R2]
+    add R0, R0, #4
+    add R2, R2, #4
+
+    b cp_flash_loop
+
+cp_flash_end:
     bx lr
