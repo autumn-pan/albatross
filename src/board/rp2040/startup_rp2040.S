@@ -114,3 +114,21 @@
     .extern I2C0_IRQ_Handler
     .extern I2C1_IRQ_Handler
     .extern RTC_IRQ_Handler
+
+.global bss_zero
+bss_zero:
+    mov R0, _sbss
+    mov R1, _ebss
+    mov R2, #0
+    bl bss_zero_loop
+
+bss_zero_loop:
+    cmp R0, R1
+    bge bss_zero_end
+
+    str R0, [R2]
+    add R0, R0, #4
+    b bss_zero_loop
+
+bss_zero_end:   
+    bx lr

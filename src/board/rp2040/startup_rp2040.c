@@ -7,6 +7,7 @@ extern uint32_t _start_bss;
 extern uint32_t _end_bss;     
 extern uint32_t initial_sp;   
 
+extern void bss_zero(void);
 
 int main(void);
 
@@ -21,10 +22,8 @@ void Reset_Handler(void)
     while (dest < &_end_data) 
         *dest++ = *src++;
 
-    // Zero out BSS
-    dest = &_start_bss;
-    while (dest < &_end_bss) 
-        *dest++ = 0;
+    // Zero out .bss
+    bss_zero();
 
     main();
 
