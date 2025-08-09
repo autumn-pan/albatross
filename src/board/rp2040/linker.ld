@@ -27,18 +27,18 @@ SECTIONS
     KEEP(*(.fini))
   } > FLASH
 
-  .data : AT(_sidata)
+  .data : AT(_start_idata)
   {
-    _sdata = .;
+    _start_data = .;
     *(.data*)
-    _edata = .;
+    _end_data = .;
   } > RAM
 
   .bss :
   {
-    _sbss = .;
+    _start_bss = .;
     *(.bss*)
     *(COMMON)
-    _ebss = .;
+    _end_bss = .;
   } > RAM
 }
