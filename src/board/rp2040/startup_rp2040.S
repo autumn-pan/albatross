@@ -127,7 +127,7 @@ bss_zero_loop:
     cmp R0, R1
     bge bss_zero_end
 
-    str R0, [R2]
+    str R2, [R0]
     add R0, R0, #4
     b bss_zero_loop
 
@@ -137,15 +137,16 @@ bss_zero_end:
 
 .global cp_flash
 cp_flash:
-    mov R0 _start_data
-    mov R1 _end_data
-    mov R2 _start_idata
+    mov R0, _start_data
+    mov R1, _end_data
+    mov R2, _start_idata
 
 cp_flash_loop:
     cmp R0, R1
     bge cp_flash_end
 
-    str R0, [R2]
+    ldr R3, [R2]
+    str R3, [R0]
     add R0, R0, #4
     add R2, R2, #4
 
@@ -198,5 +199,5 @@ PendSV_Handler:
     ldr r3, =current_tcb
     str r2, [r3]
 
-    cpsid i
+    cpsie i
     bx lr
