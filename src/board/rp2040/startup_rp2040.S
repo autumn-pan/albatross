@@ -134,6 +134,7 @@ bss_zero_loop:
 bss_zero_end:   
     bx lr
 
+
 .global cp_flash
 cp_flash:
     mov R0 _start_data
@@ -151,4 +152,51 @@ cp_flash_loop:
     b cp_flash_loop
 
 cp_flash_end:
+    bx lr
+
+.global save_context
+.global restore_context
+
+
+
+// stack_ptr exists in r1
+
+// Save the context of the current task
+save_context:
+    mrs r0, psp            // Save PSP into r0
+ 
+    stmdb r0!, {r4-r11}    // Save registers R4-R11 into R0
+    str r0, [r1]           // Save stack_ptr into r0
+    bx lr                  // Return
+
+// Restore the context of the next task
+restore_context:
+    ldr r0, [r1]           // Load stack_ptr
+    ldmia r0!, {r4-r11}    // Load R4-R11 from R0
+    msr psp, r0            // Update PSP
+    bx lr                  // Return
+
+
+.global PendSV_Handler
+
+.extern current_tcb
+.extern next_tcb
+
+PendSV_Handler:
+    cpsid i
+
+    ldr r1, =current_tcb
+    ldr r1, [r1]
+    bl save_context
+
+    ldr r1, =next_tcb    
+    ldr r1, [r1]                 
+    bl restore_context
+
+    ldr r2, =next_tcb
+    ldr r2, [r2]
+    ldr r3, =current_tcb
+    str r2, [r3]
+
+    cpsid i
     bx lr
