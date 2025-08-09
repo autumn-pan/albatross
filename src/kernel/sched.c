@@ -52,6 +52,7 @@ void update_ready_bitset(TBC* tbc)
         }
     }
 }
+
 void set_state_queue(TBC* tbc, enum TASK_STATE queue)
 {
     uint8_t index = find_node_index(tbc->state, tbc);
@@ -81,8 +82,11 @@ void switch_task(TBC* next_task, enum TASK_STATE new_queue)
 {
     set_state_queue(running, new_queue);
 
+    next_tcb = next_task;
+    current_tcb = running;
+
     // Save and change contexts
-    switch_context(running, next_task);
+    switch_context();
 
     // If necessary, update ready bitset
     update_ready_bitset(next_task);
@@ -143,8 +147,14 @@ void scheduler_loop()
             }
             else
             {
-                __asm volatile("wfi");
+                asm volatile("wfi");
             }
         }
     }
+}
+
+// Triggers PendSV
+void switch_context()
+{
+    SCB_ICSR |= SCB_ICSR_PENDSVSET_Msk;
 }
