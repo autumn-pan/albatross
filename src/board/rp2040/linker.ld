@@ -5,12 +5,7 @@
 
 initial_sp = ORIGIN(RAM) + LENGTH(RAM);
 
-_start_idata = LOADADDR(.data);
-_start_data  = ADDR(.data);
-_emd_data  = .;
 
-_start_bss   = ADDR(.bss);
-_end_bss   = .;
 
 SECTIONS
 {
@@ -27,8 +22,9 @@ SECTIONS
     KEEP(*(.fini))
   } > FLASH
 
-  .data : AT(_start_idata)
+  .data : AT(LOADADDR(.data))
   {
+    _start_idata = LOADADDR(.data);
     _start_data = .;
     *(.data*)
     _end_data = .;

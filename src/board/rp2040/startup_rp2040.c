@@ -1,4 +1,5 @@
 #include <stdint.h>
+#include "kernel/clock.h"
 
 extern uint32_t _start_idata; // Flash
 extern uint32_t _start_data; // RAM
@@ -9,6 +10,7 @@ extern uint32_t initial_sp;
 
 extern void bss_zero(void);
 extern void cp_flash(void);
+
 
 int main(void);
 
@@ -21,19 +23,11 @@ void Reset_Handler(void)
     // Zero out .bss
     bss_zero();
 
+    init_systick(0);
     main();
 
     // Infinite loop is main returns for whatever reason
     while(1);
-}
-
-void Default_Handler(void)
-{
-  for (;;);}
-
-void HardFault_Handler(void)
-{
-  for (;;);
 }
 
 
@@ -69,3 +63,18 @@ void ADC_IRQ_Handler(void)    __attribute__((weak, alias("Default_Handler")));
 void I2C0_IRQ_Handler(void)    __attribute__((weak, alias("Default_Handler")));
 void I2C1_IRQ_Handler(void)    __attribute__((weak, alias("Default_Handler")));
 void RTC_IRQ_Handler(void)    __attribute__((weak, alias("Default_Handler")));
+
+
+void Default_Handler(void)
+{
+  for (;;);}
+
+void HardFault_Handler(void)
+{
+  for (;;);
+}
+
+void SysTick_Handler(void)
+{
+  ticks++;
+}

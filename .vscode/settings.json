@@ -1,6 +1,7 @@
 {
     "files.associations": {
         "cstdint": "c",
-        "list.h": "c"
+        "list.h": "c",
+        "clock.h": "c"
     }
 }
