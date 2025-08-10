@@ -1,5 +1,5 @@
 #include <stdint.h>
-#include "kernel/clock.h"
+#include "kernel/os.h"
 
 extern uint32_t _start_idata; // Flash
 extern uint32_t _start_data; // RAM
@@ -23,7 +23,7 @@ void Reset_Handler(void)
     // Zero out .bss
     bss_zero();
 
-    init_systick(0);
+    init_os();
     main();
 
     // Infinite loop is main returns for whatever reason
