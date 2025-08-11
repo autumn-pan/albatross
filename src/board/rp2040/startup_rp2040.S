@@ -1,5 +1,5 @@
 .syntax unified
-.cpu cortex-m0+
+.cpu cortex-m0plus
 .thumb
 
 
@@ -118,9 +118,9 @@
 
 .global bss_zero
 bss_zero:
-    mov R0, _start_bss
-    mov R1, _end_bss
-    mov R2, #0
+    ldr R0, =_start_bss
+    ldr R1, =_end_bss
+    movs R2, #0
     bl bss_zero_loop
 
 bss_zero_loop:
@@ -128,7 +128,7 @@ bss_zero_loop:
     bge bss_zero_end
 
     str R2, [R0]
-    add R0, R0, #4
+    adds R0, R0, #4
     b bss_zero_loop
 
 bss_zero_end:   
@@ -137,9 +137,9 @@ bss_zero_end:
 
 .global cp_flash
 cp_flash:
-    mov R0, _start_data
-    mov R1, _end_data
-    mov R2, _start_idata
+    ldr R0, =_start_data
+    ldr R1, =_end_data
+    ldr R2, =_start_idata
 
 cp_flash_loop:
     cmp R0, R1
@@ -147,8 +147,8 @@ cp_flash_loop:
 
     ldr R3, [R2]
     str R3, [R0]
-    add R0, R0, #4
-    add R2, R2, #4
+    adds R0, R0, #4
+    adds R2, R2, #4
 
     b cp_flash_loop
 
@@ -166,14 +166,14 @@ cp_flash_end:
 save_context:
     mrs r0, psp            // Save PSP into r0
  
-    stmdb r0!, {r4-r11}    // Save registers R4-R11 into R0
+    push {r4-r7}    // Save registers R4-R11 into R0
     str r0, [r1]           // Save stack_ptr into r0
     bx lr                  // Return
 
 // Restore the context of the next task
 restore_context:
     ldr r0, [r1]           // Load stack_ptr
-    ldmia r0!, {r4-r11}    // Load R4-R11 from R0
+    pop {r4-r7}    // Load R4-R11 from R0
     msr psp, r0            // Update PSP
     bx lr                  // Return
 

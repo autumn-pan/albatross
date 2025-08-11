@@ -1,1 +1,5 @@
 test/
+CMakeLists.txt
+toolchain.cmake
+main.c
+build/

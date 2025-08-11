@@ -3,6 +3,7 @@
         "cstdint": "c",
         "list.h": "c",
         "clock.h": "c",
-        "os.h": "c"
+        "os.h": "c",
+        "stddef.h": "c"
     }
 }

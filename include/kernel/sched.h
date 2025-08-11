@@ -6,6 +6,7 @@
 #define SCB_ICSR (*(volatile uint32_t *)0xE000ED04)
 #define SCB_ICSR_PENDSVSET_Msk (1UL << 28)
 
+#include <stddef.h>
 #include "../util/list.h"
 #include "task.h"
 #include <stdint.h>

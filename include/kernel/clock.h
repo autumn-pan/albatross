@@ -22,9 +22,6 @@ volatile uint64_t ticks = 0;
 // To be called on startup-- enables SysTick
 void init_systick(uint32_t ticks);
 
-// To be called every tick
-void update_systick();
-
 // Returns the global tick count
 uint64_t get_ticks();
 
