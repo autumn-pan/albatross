@@ -1,0 +1,3 @@
+/home/autumn/Documents/os/albatross/build/CMakeFiles/albatross.elf.dir
+/home/autumn/Documents/os/albatross/build/CMakeFiles/edit_cache.dir
+/home/autumn/Documents/os/albatross/build/CMakeFiles/rebuild_cache.dir
