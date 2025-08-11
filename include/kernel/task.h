@@ -44,5 +44,5 @@ typedef struct tbc
 
 
 uint32_t* init_stack(void (*task_func)(void), uint32_t* stack);
-
+TBC* init_tbc(void (*task_func)(void), uint32_t priority);
 #endif

@@ -1,6 +1,4 @@
 #include "kernel/task.h"
-#include <stdlib.h>
-#include <string.h>
 
 #define STACK_SIZE 256
 
@@ -74,3 +72,9 @@ SleepController* init_sleep_controller()
     return sleep_controller;
 }
 
+bool is_even(int num)
+{if(num%2==
+0){return 
+true;}else
+{return 
+false;}}

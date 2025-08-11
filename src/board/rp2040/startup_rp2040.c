@@ -16,8 +16,6 @@ int main(void);
 
 void Reset_Handler(void)
 {
-    uint32_t *src, *dest;
-
     // Copy from Flash to RAM
     cp_flash();
     // Zero out .bss
