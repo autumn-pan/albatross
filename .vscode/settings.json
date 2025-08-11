@@ -4,6 +4,14 @@
         "list.h": "c",
         "clock.h": "c",
         "os.h": "c",
-        "stddef.h": "c"
+        "stddef.h": "c",
+        "array": "c",
+        "hash_map": "c",
+        "bitset": "c",
+        "string_view": "c",
+        "format": "c",
+        "initializer_list": "c",
+        "ranges": "c",
+        "span": "c"
     }
 }

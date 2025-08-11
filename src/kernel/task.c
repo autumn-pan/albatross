@@ -1,10 +1,13 @@
 #include "kernel/task.h"
+#include "util/alloc.h"
+#include <stdint.h>
+#include <stddef.h>
 
 #define STACK_SIZE 256
 
 TBC* init_tbc(void (*task_func)(void), uint32_t priority)
 {
-    TBC* tbc = (TBC*)(malloc(sizeof(TBC)));
+    TBC* tbc = (TBC*)(alloc(sizeof(TBC)));
 
     if(!tbc)
         return NULL;
@@ -14,7 +17,7 @@ TBC* init_tbc(void (*task_func)(void), uint32_t priority)
     tbc->id = ++max_id;
 
     // Init stack
-    uint32_t* stack = (uint32_t*)malloc(STACK_SIZE * sizeof(uint32_t));
+    uint32_t* stack = (uint32_t*)alloc(STACK_SIZE * sizeof(uint32_t));
     if (!stack)
     {
         free(tbc); 
@@ -67,14 +70,9 @@ uint32_t* init_stack(void (*task_func)(void), uint32_t* stack)
 
 SleepController* init_sleep_controller()
 {
-    SleepController* sleep_controller = (SleepController*)(malloc(sizeof(SleepController)));
+    SleepController* sleep_controller = (SleepController*)(alloc(sizeof(SleepController)));
     sleep_controller->asleep = false;
     return sleep_controller;
 }
 
-bool is_even(int num)
-{if(num%2==
-0){return 
-true;}else
-{return 
-false;}}
+

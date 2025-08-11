@@ -31,8 +31,8 @@ typedef struct tbc
     uint32_t priority;
     void (*task_func)(void);
 
-    uint32_t stack_ptr;
-    uint32_t stack_base;
+    uint32_t* stack_ptr;
+    uint32_t* stack_base;
     enum TASK_STATE state;
 
     uint32_t delay;
@@ -45,4 +45,6 @@ typedef struct tbc
 
 uint32_t* init_stack(void (*task_func)(void), uint32_t* stack);
 TBC* init_tbc(void (*task_func)(void), uint32_t priority);
+SleepController* init_sleep_controller();
+
 #endif
