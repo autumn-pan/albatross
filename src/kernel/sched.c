@@ -136,7 +136,7 @@ void sleep(uint32_t time)
     controller->remaining_time = time;
     running->state = SLEEPING;
 
-    list_push(sleeping, running);
+    list_push(sleeping, running->node);
     running = NULL;
 }
 
@@ -144,7 +144,7 @@ void yield()
 {
     list_append(ready_queue[running->priority], running->node);
     running->state = READY;
-    
+
     if(ready_queue[running->priority]->size == 1)
     {
         add_priority(running->priority);
