@@ -73,7 +73,7 @@ void update_scheduler()
     if(running)
     {
         running->state = READY; // Running TBC defaults to ready
-        list_append(ready_queue[running->priority], running);
+        list_append(ready_queue[running->priority], running->node);
 
         if(ready_queue[running->priority]->size == 1)
         {
@@ -85,7 +85,30 @@ void update_scheduler()
     running = ready_task;
 }
 
-void update_sleep_handlers();
+// Sleeping list is currently an unordered linked list
+// Time complexity of O(n) is very inneficient and should be replace by a heap eventually
+void update_sleep_handlers()
+{
+    ListNode* current = sleeping->head;
+
+    while(1)
+    {
+        // If there is no task to check for whatever reason, return
+        if(!current)
+            return;
+        // Update remaining time
+        ((TBC*)current->value)->sleep_controller->remaining_time--;
+
+        // If a task is ready to wake up, awake it
+        if(task_is_awake(current->value))
+        {
+            wake_task(current->value);
+        }
+
+        // Get next task
+        current = current->next;
+    }
+}
 
 // Add a task to the Scheduler
 void add_task(TBC* tbc)

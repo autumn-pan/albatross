@@ -2,6 +2,7 @@
 #include "util/alloc.h"
 #include <stdint.h>
 #include <stddef.h>
+#include "kernel/sched.h"
 
 #define STACK_SIZE 256
 
@@ -16,7 +17,7 @@ TBC* init_tbc(void (*task_func)(void), uint32_t priority)
     tbc->priority = priority;
     tbc->id = ++max_id;
     tbc->node = create_node(tbc);
-    
+
     // Init stack
     uint32_t* stack = (uint32_t*)alloc(STACK_SIZE * sizeof(uint32_t));
     if (!stack)
@@ -77,3 +78,44 @@ SleepController* init_sleep_controller()
 }
 
 
+bool task_is_awake(TBC* tbc)
+{
+    SleepController* controller = tbc->sleep_controller;
+
+    if(controller->remaining_time <= 0)
+    {
+        return true;
+    }
+
+    return false;
+}
+
+void wake_task(TBC* tbc)
+{
+    // Do nothing if task is already awake
+    if(tbc->state != SLEEPING)
+    {
+        return;
+    }
+
+    SleepController* controller = tbc->sleep_controller;
+
+    // Update sleep controller information
+    controller->asleep = false;
+    controller->init_time = NULL;
+    controller->remaining_time = NULL;
+    controller->sleep_time = NULL;
+
+    // Move TBC to ready queue
+    tbc->state = READY;
+    list_append(ready_queue[tbc->priority], tbc->node);
+
+    if(ready_queue[tbc->priority]->size == 1)
+    {
+        add_priority(tbc->priority);
+    }
+
+    // Remove TBC from sleeping
+    uint8_t index = find_node_index(sleeping, tbc->node);
+    list_pop(sleeping, index);
+}

@@ -49,4 +49,11 @@ uint32_t* init_stack(void (*task_func)(void), uint32_t* stack);
 TBC* init_tbc(void (*task_func)(void), uint32_t priority);
 SleepController* init_sleep_controller();
 
+
+// Check if a task is ready to wake up or not
+bool task_is_awake(TBC* tbc);
+
+// Move a task from sleeping list to ready queue
+void wake_task(TBC* tbc);
+
 #endif
