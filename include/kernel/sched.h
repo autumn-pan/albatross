@@ -10,7 +10,7 @@
 #include "../util/list.h"
 #include "task.h"
 #include <stdint.h>
-
+#include "clock.h"
 
 uint32_t ready_bitset;
 List* ready_queue[MAX_PRIORITIES];

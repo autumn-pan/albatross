@@ -120,3 +120,22 @@ void add_task(TBC* tbc)
         add_priority(tbc->priority);
     }
 }
+
+void sleep(uint32_t time)
+{
+    if(!running)
+    {
+        return;
+    }
+
+    SleepController* controller = running->sleep_controller;
+
+    controller->asleep = true;
+    controller->init_time = ticks;
+    controller->sleep_time = time;
+    controller->remaining_time = time;
+    running->state = SLEEPING;
+
+    list_push(sleeping, running);
+    running = NULL;
+}
