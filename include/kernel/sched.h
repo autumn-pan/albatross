@@ -40,5 +40,7 @@ void sleep(uint32_t time);
 void switch_context();
 TBC* next_task();
 void update_scheduler();
+void update_sleep_handlers();
+void add_task(TBC* tbc);
 
 #endif

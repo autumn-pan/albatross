@@ -4,8 +4,6 @@
 #include <stddef.h>
 #include "kernel/sched.h"
 
-#define STACK_SIZE 256
-
 TBC* init_tbc(void (*task_func)(void), uint32_t priority)
 {
     TBC* tbc = (TBC*)(alloc(sizeof(TBC)));
@@ -102,9 +100,6 @@ void wake_task(TBC* tbc)
 
     // Update sleep controller information
     controller->asleep = false;
-    controller->init_time = NULL;
-    controller->remaining_time = NULL;
-    controller->sleep_time = NULL;
 
     // Move TBC to ready queue
     tbc->state = READY;

@@ -4,6 +4,8 @@
 #include <stddef.h>
 #include <stdint.h>
 #include <stdbool.h>
+#include "../util/list.h"
+#define STACK_SIZE 256
 
 // Task ID is initially set to -1 such that the first task will have ID 0. Task IDs will increment linearly in O(1) time.
 int max_id = -1;
