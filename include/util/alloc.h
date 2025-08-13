@@ -21,6 +21,6 @@ static LinkedAlloc_t* alloc_lists[NUM_ALLOC_LISTS];
 void init_alloc();
 void* alloc(uint8_t size);
 void free(void *ptr);
-void memset(void* ptr, uint8_t value, size_t size);
+void* memset(void* ptr, uint8_t value, size_t size);
 
 #endif

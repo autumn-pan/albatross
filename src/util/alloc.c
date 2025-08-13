@@ -11,7 +11,7 @@ void init_alloc()
     alloc_lists[NUM_ALLOC_LISTS - 1]->next = NULL;
 }
 
-uint8_t find_min_block_index(uint8_t size)
+int8_t find_min_block_index(uint8_t size)
 {
     int8_t i = 0;
     while (i < NUM_ALLOC_LISTS)
@@ -28,7 +28,7 @@ uint8_t find_min_block_index(uint8_t size)
         }
     }
 
-    return NULL;
+    return -1;
 }
 
 void* alloc(uint8_t size)
@@ -117,7 +117,7 @@ void merge_alloc_blocks_at_index(uint8_t index)
     alloc_lists[index + 1] = merged;
 }
 
-void memset(void* ptr, uint8_t value, size_t size)
+void* memset(void* ptr, uint8_t value, size_t size)
 {
     uint8_t* p = (uint8_t*)ptr;
 
