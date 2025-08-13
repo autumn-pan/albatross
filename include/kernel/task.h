@@ -27,6 +27,8 @@ typedef struct
 
 typedef struct tbc
 {
+    ListNode* node;
+
     struct tbc* next;
     uint32_t priority;
     void (*task_func)(void);

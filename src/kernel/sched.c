@@ -86,3 +86,14 @@ void update_scheduler()
 }
 
 void update_sleep_handlers();
+
+// Add a task to the Scheduler
+void add_task(TBC* tbc)
+{
+    list_append(ready_queue[tbc->priority], tbc->node);
+
+    if(ready_queue[tbc->priority]->size == 1)
+    {
+        add_priority(tbc->priority);
+    }
+}
