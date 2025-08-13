@@ -139,3 +139,18 @@ void sleep(uint32_t time)
     list_push(sleeping, running);
     running = NULL;
 }
+
+void yield()
+{
+    list_append(ready_queue[running->priority], running->node);
+    running->state = READY;
+    
+    if(ready_queue[running->priority]->size == 1)
+    {
+        add_priority(running->priority);
+    }
+    running = NULL;
+
+
+    __asm__ volatile("wfi");
+}
