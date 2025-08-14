@@ -58,7 +58,8 @@ void update_scheduler()
 
     // If there is at least one ready task, this code will execute
     TBC* ready_task = ready_queue[highest_priority]->head->value;
-
+    next_tcb = ready_task;
+    
     // If the ready task is the last of its priority, write that the priority is now empty in the bitset
     // This computes in O(n) time but can lead to signicant errors if the bitset is not correctly handled. The alternative is a safe, albeit O(n) algorithm.
     if(ready_queue[highest_priority]->size == 1)
@@ -83,6 +84,7 @@ void update_scheduler()
 
     // Mark the ready task as the current running task
     running = ready_task;
+    current_tcb = ready_task;
 }
 
 // Sleeping list is currently an unordered linked list
