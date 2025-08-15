@@ -1,6 +1,19 @@
 #include "kernel/sched.h"
 #include "util/list.h"
 
+uint32_t ready_bitset;
+List* ready_queue[MAX_PRIORITIES];
+List* sleeping;
+TBC* running;
+
+TBC* current_context;
+
+void *current_tcb;
+void *next_tcb;
+
+bool is_ready_task;
+bool is_running_task;
+
 // Bitset functions-- used to configure priority bitset
 // Set any bit to 1
 void add_priority(uint32_t priority) {

@@ -7,7 +7,7 @@ extern uint32_t _start_data; // RAM
 extern uint32_t _end_data; // RAN
 extern uint32_t _start_bss;    
 extern uint32_t _end_bss;     
-extern uint32_t initial_sp;   
+extern uint32_t _initial_sp;   
 
 extern void bss_zero(void);
 extern void cp_flash(void);

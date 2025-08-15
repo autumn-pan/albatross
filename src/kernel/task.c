@@ -13,7 +13,6 @@ TBC* init_tbc(void (*task_func)(void), uint32_t priority)
 
     tbc->task_func = task_func;
     tbc->priority = priority;
-    tbc->id = ++max_id;
     tbc->node = create_node(tbc);
 
     // Init stack

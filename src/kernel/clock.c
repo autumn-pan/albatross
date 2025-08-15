@@ -1,5 +1,7 @@
 #include "kernel/clock.h"
 
+volatile uint64_t ticks = 0;
+
 void init_systick(uint32_t ticks) 
 {
     SYSTICK_LOAD = ticks - 1; // Set reload value

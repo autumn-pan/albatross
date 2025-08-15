@@ -12,18 +12,18 @@
 #include <stdint.h>
 #include "clock.h"
 
-uint32_t ready_bitset;
-List* ready_queue[MAX_PRIORITIES];
-List* sleeping;
-TBC* running;
+extern uint32_t ready_bitset;
+extern List* ready_queue[MAX_PRIORITIES];
+extern List* sleeping;
+extern TBC* running;
 
-TBC* current_context;
+extern TBC* current_context;
 
-void *current_tcb;
-void *next_tcb;
+extern void *current_tcb;
+extern void *next_tcb;
 
-bool is_ready_task;
-bool is_running_task;
+extern bool is_ready_task;
+extern bool is_running_task;
 
 // Bitset operations
 void add_priority(uint32_t priority);

@@ -22,5 +22,6 @@ void init_alloc();
 void* alloc(uint8_t size);
 void free(void *ptr);
 void* memset(void* ptr, uint8_t value, size_t size);
+void update_sleep_handlers();
 
 #endif

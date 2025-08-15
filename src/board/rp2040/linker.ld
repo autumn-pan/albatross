@@ -1,10 +1,11 @@
+MEMORY
 {
   FLASH (rx)  : ORIGIN = 0x10000000, LENGTH = 2M     /* External QSPI flash */
   RAM   (rwx) : ORIGIN = 0x20000000, LENGTH = 256K   /* SRAM (RP2040 has 264K, but 256K is safe default) */
 }
 
 initial_sp = ORIGIN(RAM) + LENGTH(RAM);
-
+_data_load_addr = LOADADDR(.data);
 
 
 SECTIONS
@@ -22,7 +23,7 @@ SECTIONS
     KEEP(*(.fini))
   } > FLASH
 
-  .data : AT(LOADADDR(.data))
+  .data : AT(_data_load_addr)
   {
     _start_idata = LOADADDR(.data);
     _start_data = .;

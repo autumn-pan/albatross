@@ -17,7 +17,7 @@
 #define SYSTICK_CLKSOURCE  (1 << 2) // Bit 2
 
 // Global tick counter
-volatile uint64_t ticks = 0;
+extern volatile uint64_t ticks;
 
 // To be called on startup-- enables SysTick
 void init_systick(uint32_t ticks);

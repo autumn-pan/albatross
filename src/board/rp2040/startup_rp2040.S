@@ -3,10 +3,11 @@
 .thumb
 
 
+.global initial_sp
 
 .section .isr_vector, "a"
     .align  2
-    .word   _stack_ptr
+    .word   _initial_sp
 
     .word   Reset_Handler
     .word   NMI_Handler
