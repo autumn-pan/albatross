@@ -3,11 +3,10 @@
 .thumb
 
 
-.global initial_sp
+.global _initial_sp
 
 .section .isr_vector, "a"
     .align  2
-    .word   _initial_sp
 
     .word   Reset_Handler
     .word   NMI_Handler
@@ -39,7 +38,7 @@
     .word XIP_IRQ_Handler
     .word PIO0_IRQ_0_Handler
     .word PIO0_IRQ_1_Handler
-    .word PIO1_IRQ_Handler
+    .word PIO1_IRQ_0_Handler
     .word PIO1_IRQ_1_Handler
     .word DMA_IRQ_0_Handler
     .word DMA_IRQ_1_Handler
@@ -100,7 +99,7 @@
     .extern XIP_IRQ_Handler
     .extern PIO0_IRQ_0_Handler
     .extern PIO0_IRQ_1_Handler
-    .extern PIO1_IRQ_Handler
+    .extern PIO1_IRQ_0_Handler
     .extern PIO1_IRQ_1_Handler
     .extern DMA_IRQ_0_Handler
     .extern DMA_IRQ_1_Handler

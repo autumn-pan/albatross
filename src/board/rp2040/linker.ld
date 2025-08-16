@@ -4,7 +4,7 @@ MEMORY
   RAM   (rwx) : ORIGIN = 0x20000000, LENGTH = 256K   /* SRAM (RP2040 has 264K, but 256K is safe default) */
 }
 
-initial_sp = ORIGIN(RAM) + LENGTH(RAM);
+_initial_sp = ORIGIN(RAM) + LENGTH(RAM);
 _data_load_addr = LOADADDR(.data);
 
 

@@ -29,6 +29,22 @@ void remove_priority(uint32_t priority) {
     }
 }
 
+uint32_t count_leading_zeros(uint32_t n)
+{
+    if(n == 0)
+        return 32;
+    uint32_t count = 0;
+    while(1)
+    {
+        if(n & 0x80000000)
+            break;
+        count++;
+        n <<= 1;
+    }
+
+    return count;
+}
+
 // FInd the highest priority ready task
 uint32_t get_highest_priority()
 {
@@ -36,7 +52,7 @@ uint32_t get_highest_priority()
         return -1; 
     }
 
-    return __builtin_clz(ready_bitset);
+    return count_leading_zeros(ready_bitset);
 }
 
 // Triggers PendSV
