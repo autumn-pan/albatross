@@ -1,5 +1,6 @@
 #include "util/alloc.h"
 
+// Set initial values of each memory allocation list
 void init_alloc()
 {
     for (int i = 0; i < NUM_ALLOC_LISTS; i++)
@@ -11,9 +12,13 @@ void init_alloc()
     alloc_lists[NUM_ALLOC_LISTS - 1]->next = NULL;
 }
 
+
+// Find the index of the smallest block that can fit any given size
 int8_t find_min_block_index(uint8_t size)
 {
     int8_t i = 0;
+
+    // Check all allocation lists
     while (i < NUM_ALLOC_LISTS)
     {
         if (alloc_lists[i] == NULL)
@@ -22,6 +27,7 @@ int8_t find_min_block_index(uint8_t size)
             continue;
         }
 
+        // The previous conditional filters out any indices
         if (size <= 2 << i)
         {
             return i;
@@ -30,6 +36,7 @@ int8_t find_min_block_index(uint8_t size)
         i++;
     }
 
+    // Return -1 if there is not enough free memory
     return -1;
 }
 
@@ -50,22 +57,23 @@ void* alloc(uint8_t size)
     LinkedAlloc_t *block = alloc_lists[index];
     alloc_lists[index] = block->next;
 
-    while (1)
-    {
-        // Check if block can be split
-        if (size >> 1 < 2 << index)
-        {
-            // Split block if possible
-            if(index = 0)
-                break; 
+    uint32_t block_size = 2 << index;
 
-            index--;
-            LinkedAlloc_t *new_block = (LinkedAlloc_t *)((uint8_t *)block + (2 << index));
-            new_block->next = alloc_lists[index];
-            alloc_lists[index] = new_block;
-            continue;
-        }
-        break;
+    // Check if the required size is less than half the size of the block
+    while (size >> 1 < block_size)
+    {
+        // Split block if possible
+        if(index = 0)
+            break; 
+
+        index--;
+
+        // Split the block and push it to the new free list
+        LinkedAlloc_t *new_block = (LinkedAlloc_t *)((uint8_t *)block + (2 << index));
+        new_block->next = alloc_lists[index];
+        alloc_lists[index] = new_block;
+
+        block_size = 2 << index;
     }
 
     return (void *)block;
@@ -104,13 +112,17 @@ void merge_alloc_blocks_at_index(uint8_t index)
 
     LinkedAlloc_t* prev = NULL;
 
-    while (1)
+    while (block && block->next)
     {
         if ((uint8_t*)block + (2 << index) == (uint8_t*)block->next) // Check if two blocks are adjacent in memory
         {
-            if (prev) 
+            if (prev && block->next->next) 
             {
                 prev->next = block->next->next;
+            }
+            else if(prev)
+            {
+                prev = NULL;
             }
             else 
             {
@@ -125,6 +137,8 @@ void merge_alloc_blocks_at_index(uint8_t index)
     alloc_lists[index + 1] = merged;
 }
 
+
+// Set all bytes in some range in memory to some particular value
 void* memset(void* ptr, uint8_t value, size_t size)
 {
     uint8_t* p = (uint8_t*)ptr;
