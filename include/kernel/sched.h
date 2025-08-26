@@ -30,7 +30,7 @@ void add_priority(uint32_t priority);
 
 void remove_priority(uint32_t priority);
 
-uint32_t get_highest_priority();
+int8_t get_highest_priority();
 
 // Yields the running task's turn and sends it to the end of the READY queue, selecting a new task to take its place
 void yield();

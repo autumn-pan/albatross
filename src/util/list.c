@@ -12,9 +12,9 @@ void init_list(List* list)
     list->size = 0;
 }
 
-ListNode* create_node(void* value) {
+ListNode* create_node(void* value) 
+{
     ListNode* node = (ListNode*)alloc(sizeof(ListNode));
-
 
     node->value = value;
     node->next = NULL;

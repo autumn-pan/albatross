@@ -26,6 +26,8 @@ int8_t find_min_block_index(uint8_t size)
         {
             return i;
         }
+
+        i++;
     }
 
     return -1;
@@ -38,9 +40,9 @@ void* alloc(uint8_t size)
         return NULL;
     }
 
-    uint8_t index = find_min_block_index(size);
+    int8_t index = find_min_block_index(size);
 
-    if (!index)
+    if (index == -1)
     {
         return NULL;
     }
@@ -54,6 +56,9 @@ void* alloc(uint8_t size)
         if (size >> 1 < 2 << index)
         {
             // Split block if possible
+            if(index = 0)
+                break; 
+
             index--;
             LinkedAlloc_t *new_block = (LinkedAlloc_t *)((uint8_t *)block + (2 << index));
             new_block->next = alloc_lists[index];
@@ -70,7 +75,7 @@ void free(void *ptr)
 {
     if (ptr == NULL)
     {
-        return; // Nothing to free
+        return; // Nothing to `free
     }
 
     // Calculate the block's index based on its size
@@ -103,9 +108,12 @@ void merge_alloc_blocks_at_index(uint8_t index)
     {
         if ((uint8_t*)block + (2 << index) == (uint8_t*)block->next) // Check if two blocks are adjacent in memory
         {
-            if (prev) {
+            if (prev) 
+            {
                 prev->next = block->next->next;
-            } else {
+            }
+            else 
+            {
                 alloc_lists[index] = block->next->next;
             }
             break;

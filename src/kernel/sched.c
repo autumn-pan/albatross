@@ -34,6 +34,7 @@ uint32_t count_leading_zeros(uint32_t n)
     if(n == 0)
         return 32;
     uint32_t count = 0;
+
     while(1)
     {
         if(n & 0x80000000)
@@ -46,7 +47,7 @@ uint32_t count_leading_zeros(uint32_t n)
 }
 
 // FInd the highest priority ready task
-uint32_t get_highest_priority()
+int8_t get_highest_priority()
 {
     if (ready_bitset == 0) {
         return -1; 
@@ -71,7 +72,7 @@ void update_scheduler()
     // Before anything, check if any sleeping tasks are ready to wake up and manage them
     update_sleep_handlers();
 
-    uint8_t highest_priority = get_highest_priority();
+    int8_t highest_priority = get_highest_priority();
     // Check if there are any ready tasks
     if(highest_priority == -1)
     {
