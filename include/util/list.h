@@ -24,6 +24,6 @@ void list_push(List* list, ListNode* node);
 void list_pop_head(List* list);
 void list_pop(List* list, int index);
 void list_append(List * list, ListNode* node);
-uint8_t find_node_index(List* list, ListNode* node);
+int8_t find_node_index(List* list, ListNode* node);
 
 #endif
