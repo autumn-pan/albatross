@@ -23,7 +23,7 @@ typedef struct
     uint32_t init_time; // The time in ms that the task was put to sleep
     uint32_t sleep_time; // The total time that the task is meant to sleep for
     uint32_t remaining_time; // The remaining time it is supposed to sleep for
-} SleepController;
+} SleepController_t;
 
 typedef struct tcb
 {
@@ -40,14 +40,14 @@ typedef struct tcb
     uint32_t delay;
     uint8_t id;
 
-    SleepController* sleep_controller;
+    SleepController_t* sleep_controller;
 } TaskControlBlock_t;
 
 
 
 uint32_t* init_stack(void (*task_func)(void), uint32_t* stack);
 TaskControlBlock_t* init_tbc(void (*task_func)(void), uint32_t priority);
-SleepController* init_sleep_controller();
+SleepController_t* init_sleep_controller();
 
 
 // Check if a task is ready to wake up or not

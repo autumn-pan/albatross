@@ -160,7 +160,7 @@ void sleep(uint32_t time)
         return;
     }
 
-    SleepController* controller = running->sleep_controller;
+    SleepController_t* controller = running->sleep_controller;
 
     controller->asleep = true;
     controller->init_time = ticks;
