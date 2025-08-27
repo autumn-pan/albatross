@@ -25,11 +25,11 @@ typedef struct
     uint32_t remaining_time; // The remaining time it is supposed to sleep for
 } SleepController;
 
-typedef struct tbc
+typedef struct tcb
 {
     ListNode* node;
 
-    struct tbc* next;
+    struct tcb* next;
     uint32_t priority;
     void (*task_func)(void);
 
@@ -41,20 +41,20 @@ typedef struct tbc
     uint8_t id;
 
     SleepController* sleep_controller;
-} TBC;
+} TaskControlBlock_t;
 
 
 
 uint32_t* init_stack(void (*task_func)(void), uint32_t* stack);
-TBC* init_tbc(void (*task_func)(void), uint32_t priority);
+TaskControlBlock_t* init_tbc(void (*task_func)(void), uint32_t priority);
 SleepController* init_sleep_controller();
 
 
 // Check if a task is ready to wake up or not
-bool task_is_awake(TBC* tbc);
+bool task_is_awake(TaskControlBlock_t* tcb);
 
 // Move a task from sleeping list to ready queue
-void wake_task(TBC* tbc);
+void wake_task(TaskControlBlock_t* tcb);
 
 
 #endif  
