@@ -2,8 +2,8 @@
 #include "util/list.h"
 
 uint32_t ready_bitset;
-List* ready_queue[MAX_PRIORITIES];
-List* sleeping;
+List_t* ready_queue[MAX_PRIORITIES];
+List_t* sleeping;
 TaskControlBlock_t* running;
 
 TaskControlBlock_t* current_context;
@@ -121,7 +121,7 @@ void update_scheduler()
 // Time complexity of O(n) is very inneficient and should be replace by a heap eventually
 void update_sleep_handlers()
 {
-    ListNode* current = sleeping->head;
+    ListNode_t* current = sleeping->head;
 
     while(1)
     {

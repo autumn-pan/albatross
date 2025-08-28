@@ -25,17 +25,20 @@ void Reset_Handler(void)
     init_os();
     main();
 
-    // Infinite loop is main returns for whatever reason
+    // Main should not never return, but loop infinitely if it does
     while(1);
 }
 
 
+
 // Set all handlers as weak aliases for Default_Handler for now
+
+// ARM Cortex-m0+
 void NMI_Handler(void)        __attribute__((weak, alias("Default_Handler")));
 void SVC_Handler(void)        __attribute__((weak, alias("Default_Handler")));
 void DebugMon_Handler(void)   __attribute__((weak, alias("Default_Handler")));
 void PendSV_Handler(void)     __attribute__((weak, alias("Default_Handler")));
-
+// rp2040-specific
 void TIMER_IRQ_0_Handler(void)    __attribute__((weak, alias("Default_Handler")));
 void TIMER_IRQ_1_Handler(void)    __attribute__((weak, alias("Default_Handler")));
 void TIMER_IRQ_2_Handler(void)    __attribute__((weak, alias("Default_Handler")));
