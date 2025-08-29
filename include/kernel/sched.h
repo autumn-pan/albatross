@@ -15,9 +15,9 @@
 extern uint32_t ready_bitset;
 extern List* ready_queue[MAX_PRIORITIES];
 extern List* sleeping;
-extern TBC* running;
+extern TaskControlBlock_t* running;
 
-extern TBC* current_context;
+extern TaskControlBlock_t* current_context;
 
 extern void *current_tcb;
 extern void *next_tcb;
@@ -30,7 +30,7 @@ void add_priority(uint32_t priority);
 
 void remove_priority(uint32_t priority);
 
-uint32_t get_highest_priority();
+int8_t get_highest_priority();
 
 // Yields the running task's turn and sends it to the end of the READY queue, selecting a new task to take its place
 void yield();
@@ -38,9 +38,9 @@ void yield();
 void sleep(uint32_t time);
 
 void switch_context();
-TBC* next_task();
+TaskControlBlock_t* next_task();
 void update_scheduler();
 void update_sleep_handlers();
-void add_task(TBC* tbc);
+void add_task(TaskControlBlock_t* tcb);
 
 #endif

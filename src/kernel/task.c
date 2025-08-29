@@ -4,43 +4,43 @@
 #include <stddef.h>
 #include "kernel/sched.h"
 
-TBC* init_tbc(void (*task_func)(void), uint32_t priority)
+TaskControlBlock_t* init_tbc(void (*task_func)(void), uint32_t priority)
 {
-    TBC* tbc = (TBC*)(alloc(sizeof(TBC)));
+    TaskControlBlock_t* tcb = (TaskControlBlock_t*)(alloc(sizeof(TaskControlBlock_t)));
 
-    if(!tbc)
+    if(!tcb)
         return NULL;
 
-    tbc->task_func = task_func;
-    tbc->priority = priority;
-    tbc->node = create_node(tbc);
+    tcb->task_func = task_func;
+    tcb->priority = priority;
+    tcb->node = create_node(tcb);
 
     // Init stack
     uint32_t* stack = (uint32_t*)alloc(STACK_SIZE * sizeof(uint32_t));
     if (!stack)
     {
-        free(tbc); 
+        free(tcb); 
         return NULL;
     }
 
     // Clear stack
     memset(stack, 0, STACK_SIZE * sizeof(uint32_t));
 
-    tbc->stack_ptr = init_stack(task_func, stack);
+    tcb->stack_ptr = init_stack(task_func, stack);
 
     // If init_stack fails, free everything
-    if (!tbc->stack_ptr)
+    if (!tcb->stack_ptr)
     {
         free(stack);
-        free(tbc);
+        free(tcb);
         return NULL;
     }
 
-    tbc->stack_base = stack;
+    tcb->stack_base = stack;
 
-    tbc->sleep_controller = init_sleep_controller();
+    tcb->sleep_controller = init_sleep_controller();
     
-    return tbc;
+    return tcb;
 }
 
 uint32_t* init_stack(void (*task_func)(void), uint32_t* stack)
@@ -75,9 +75,9 @@ SleepController* init_sleep_controller()
 }
 
 
-bool task_is_awake(TBC* tbc)
+bool task_is_awake(TaskControlBlock_t* tcb)
 {
-    SleepController* controller = tbc->sleep_controller;
+    SleepController* controller = tcb->sleep_controller;
 
     if(controller->remaining_time <= 0)
     {
@@ -87,29 +87,29 @@ bool task_is_awake(TBC* tbc)
     return false;
 }
 
-void wake_task(TBC* tbc)
+void wake_task(TaskControlBlock_t* tcb)
 {
     // Do nothing if task is already awake
-    if(tbc->state != SLEEPING)
+    if(tcb->state != SLEEPING)
     {
         return;
     }
 
-    SleepController* controller = tbc->sleep_controller;
+    SleepController* controller = tcb->sleep_controller;
 
     // Update sleep controller information
     controller->asleep = false;
 
     // Move TBC to ready queue
-    tbc->state = READY;
-    list_append(ready_queue[tbc->priority], tbc->node);
+    tcb->state = READY;
+    list_append(ready_queue[tcb->priority], tcb->node);
 
-    if(ready_queue[tbc->priority]->size == 1)
+    if(ready_queue[tcb->priority]->size == 1)
     {
-        add_priority(tbc->priority);
+        add_priority(tcb->priority);
     }
 
     // Remove TBC from sleeping
-    uint8_t index = find_node_index(sleeping, tbc->node);
+    uint8_t index = find_node_index(sleeping, tcb->node);
     list_pop(sleeping, index);
 }

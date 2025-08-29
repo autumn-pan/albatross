@@ -2,11 +2,11 @@
 #include "util/list.h"
 
 uint32_t ready_bitset;
-List* ready_queue[MAX_PRIORITIES];
-List* sleeping;
-TBC* running;
+List_t* ready_queue[MAX_PRIORITIES];
+List_t* sleeping;
+TaskControlBlock_t* running;
 
-TBC* current_context;
+TaskControlBlock_t* current_context;
 
 void *current_tcb;
 void *next_tcb;
@@ -34,6 +34,7 @@ uint32_t count_leading_zeros(uint32_t n)
     if(n == 0)
         return 32;
     uint32_t count = 0;
+
     while(1)
     {
         if(n & 0x80000000)
@@ -46,7 +47,7 @@ uint32_t count_leading_zeros(uint32_t n)
 }
 
 // FInd the highest priority ready task
-uint32_t get_highest_priority()
+int8_t get_highest_priority()
 {
     if (ready_bitset == 0) {
         return -1; 
@@ -61,7 +62,7 @@ void switch_context()
     SCB_ICSR |= SCB_ICSR_PENDSVSET_Msk;
 }
 
-TBC* next_task()
+TaskControlBlock_t* next_task()
 {
     return ready_queue[get_highest_priority()]->head->value;
 }
@@ -71,7 +72,7 @@ void update_scheduler()
     // Before anything, check if any sleeping tasks are ready to wake up and manage them
     update_sleep_handlers();
 
-    uint8_t highest_priority = get_highest_priority();
+    int8_t highest_priority = get_highest_priority();
     // Check if there are any ready tasks
     if(highest_priority == -1)
     {
@@ -86,7 +87,7 @@ void update_scheduler()
     }
 
     // If there is at least one ready task, this code will execute
-    TBC* ready_task = ready_queue[highest_priority]->head->value;
+    TaskControlBlock_t* ready_task = ready_queue[highest_priority]->head->value;
     next_tcb = ready_task;
     
     // If the ready task is the last of its priority, write that the priority is now empty in the bitset
@@ -120,7 +121,7 @@ void update_scheduler()
 // Time complexity of O(n) is very inneficient and should be replace by a heap eventually
 void update_sleep_handlers()
 {
-    ListNode* current = sleeping->head;
+    ListNode_t* current = sleeping->head;
 
     while(1)
     {
@@ -128,7 +129,7 @@ void update_sleep_handlers()
         if(!current)
             return;
         // Update remaining time
-        ((TBC*)current->value)->sleep_controller->remaining_time--;
+        ((TaskControlBlock_t*)current->value)->sleep_controller->remaining_time--;
 
         // If a task is ready to wake up, awake it
         if(task_is_awake(current->value))
@@ -142,13 +143,13 @@ void update_sleep_handlers()
 }
 
 // Add a task to the Scheduler
-void add_task(TBC* tbc)
+void add_task(TaskControlBlock_t* tcb)
 {
-    list_append(ready_queue[tbc->priority], tbc->node);
+    list_append(ready_queue[tcb->priority], tcb->node);
 
-    if(ready_queue[tbc->priority]->size == 1)
+    if(ready_queue[tcb->priority]->size == 1)
     {
-        add_priority(tbc->priority);
+        add_priority(tcb->priority);
     }
 }
 
@@ -159,7 +160,7 @@ void sleep(uint32_t time)
         return;
     }
 
-    SleepController* controller = running->sleep_controller;
+    SleepController_t* controller = running->sleep_controller;
 
     controller->asleep = true;
     controller->init_time = ticks;
