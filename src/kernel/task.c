@@ -66,10 +66,9 @@ uint32_t* init_stack(void (*task_func)(void), uint32_t* stack)
 
     return sp;
 }
-
-SleepController* init_sleep_controller()
+SleepController_t* init_sleep_controller()
 {
-    SleepController* sleep_controller = (SleepController*)(alloc(sizeof(SleepController)));
+    SleepController_t* sleep_controller = (SleepController_t*)(alloc(sizeof(SleepController_t)));
     sleep_controller->asleep = false;
     return sleep_controller;
 }
@@ -77,7 +76,7 @@ SleepController* init_sleep_controller()
 
 bool task_is_awake(TaskControlBlock_t* tcb)
 {
-    SleepController* controller = tcb->sleep_controller;
+    SleepController_t* controller = tcb->sleep_controller;
 
     if(controller->remaining_time <= 0)
     {
@@ -95,7 +94,7 @@ void wake_task(TaskControlBlock_t* tcb)
         return;
     }
 
-    SleepController* controller = tcb->sleep_controller;
+    SleepController_t* controller = tcb->sleep_controller;
 
     // Update sleep controller information
     controller->asleep = false;

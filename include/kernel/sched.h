@@ -13,8 +13,8 @@
 #include "clock.h"
 
 extern uint32_t ready_bitset;
-extern List* ready_queue[MAX_PRIORITIES];
-extern List* sleeping;
+extern List_t* ready_queue[MAX_PRIORITIES];
+extern List_t* sleeping;
 extern TaskControlBlock_t* running;
 
 extern TaskControlBlock_t* current_context;

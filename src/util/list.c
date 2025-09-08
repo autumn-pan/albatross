@@ -5,16 +5,16 @@
 #include "util/list.h"
 #include "util/alloc.h"
 
-void init_list(List* list)
+void init_list(List_t* list)
 {
     list->head = NULL;
     list->tail = NULL;
     list->size = 0;
 }
 
-ListNode* create_node(void* value) 
+ListNode_t* create_node(void* value) 
 {
-    ListNode* node = (ListNode*)alloc(sizeof(ListNode));
+    ListNode_t* node = (ListNode_t*)alloc(sizeof(ListNode_t));
 
     node->value = value;
     node->next = NULL;
@@ -22,7 +22,7 @@ ListNode* create_node(void* value)
 }
 
 // Push a node to the front of a linked list
-void list_push(List* list, ListNode* node)
+void list_push(List_t* list, ListNode_t* node)
 {
     if(list->head == NULL) // First insertion
     {
@@ -45,7 +45,7 @@ void list_push(List* list, ListNode* node)
 }
 
 
-void list_append(List * list, ListNode* node)
+void list_append(List_t * list, ListNode_t* node)
 {
     if(list->head == NULL) // First insertion
     {
@@ -69,18 +69,18 @@ void list_append(List * list, ListNode* node)
 }
 
 // Destroy the first node of some list
-void list_pop_head(List* list)
+void list_pop_head(List_t* list)
 {
-    ListNode* tmp = list->head->next;
+    ListNode_t* tmp = list->head->next;
     free(list->head);
     list->head = tmp;
     list->size--;
 }
 
 // Destroy any node in a list by index
-void list_pop(List* list, int index)
+void list_pop(List_t* list, int index)
 {
-    ListNode* tmp = list->head;
+    ListNode_t* tmp = list->head;
 
     for(int i = 0; i < index - 1; i++)
     {
@@ -93,9 +93,9 @@ void list_pop(List* list, int index)
 }
 
 // Find the index of a node in a list
-int8_t find_node_index(List* list, ListNode* node)
+int8_t find_node_index(List_t* list, ListNode_t* node)
 {
-    ListNode* tmp = list->head;
+    ListNode_t* tmp = list->head;
 
     uint8_t index = 0;
     while(tmp != node)

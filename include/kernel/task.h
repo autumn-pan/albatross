@@ -27,7 +27,7 @@ typedef struct
 
 typedef struct tcb
 {
-    ListNode* node;
+    ListNode_t* node;
 
     struct tcb* next;
     uint32_t priority;

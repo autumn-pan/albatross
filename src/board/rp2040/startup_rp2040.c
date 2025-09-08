@@ -1,6 +1,5 @@
 #include <stdint.h>
-#include "kernel/os.h"
-#include "kernel/sched.h"
+
 
 extern uint32_t _start_idata; // Flash
 extern uint32_t _start_data; // RAM
@@ -12,8 +11,10 @@ extern uint32_t _initial_sp;
 extern void bss_zero(void);
 extern void cp_flash(void);
 
+uint8_t* current_tcb;
+uint8_t* next_tcb;
 
-int main(void);
+extern int main(void);
 
 void Reset_Handler(void)
 {
@@ -22,7 +23,6 @@ void Reset_Handler(void)
     // Zero out .bss
     bss_zero();
 
-    init_os();
     main();
 
     // Main should not never return, but loop infinitely if it does
@@ -36,7 +36,6 @@ void Reset_Handler(void)
 // ARM Cortex-m0+
 void NMI_Handler(void)        __attribute__((weak, alias("Default_Handler")));
 void SVC_Handler(void)        __attribute__((weak, alias("Default_Handler")));
-void DebugMon_Handler(void)   __attribute__((weak, alias("Default_Handler")));
 void PendSV_Handler(void)     __attribute__((weak, alias("Default_Handler")));
 // rp2040-specific
 void TIMER_IRQ_0_Handler(void)    __attribute__((weak, alias("Default_Handler")));
@@ -77,7 +76,5 @@ void HardFault_Handler(void)
 
 void SysTick_Handler(void)
 {
-  ticks++;
 
-  void update_scheduler();
 }

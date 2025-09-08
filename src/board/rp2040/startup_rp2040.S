@@ -1,13 +1,15 @@
 .syntax unified
 .cpu cortex-m0plus
 .thumb
-
+.align 2
 
 .global _initial_sp
+.global Reset_Handler
+.global Default_Handler
 
 .section .isr_vector, "a"
-    .align  2
 
+    .word   _initial_sp
     .word   Reset_Handler
     .word   NMI_Handler
     .word   HardFault_Handler
@@ -21,7 +23,7 @@
     .word   0
 
     .word   SVC_Handler
-    .word   DebugMon_Handler
+    .word   0 // DebugMon not supported 
 
     .word   0
 
@@ -72,15 +74,12 @@
 
 
 .section .text
-    .global Reset_Handler
-    .global Default_Handler
 
     .word _start_idata
     .word _start_data
     .word _end_data
     .word _start_bss
     .word _end_bss
-    .word _initial_sp
 
     .extern Reset_Handler
     .extern HardFault_Handler

@@ -5,6 +5,7 @@
 #define MAX_BLOCK_SIZE 1024
 #define MIN_BLOCK_SIZE 8
 #define NUM_ALLOC_LISTS 7
+
 #include <stdint.h>
 #include "list.h"
 #include <stddef.h>
