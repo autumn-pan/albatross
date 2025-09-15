@@ -4,6 +4,7 @@
 #include <stddef.h>
 #include "kernel/sched.h"
 
+// Uses the built in dynamic memory allocator for tbc initialization, but a static option should be provided in the future
 TaskControlBlock_t* init_tbc(void (*task_func)(void), uint32_t priority)
 {
     TaskControlBlock_t* tcb = (TaskControlBlock_t*)(alloc(sizeof(TaskControlBlock_t)));
@@ -49,6 +50,8 @@ uint32_t* init_stack(void (*task_func)(void), uint32_t* stack)
 
     sp -= 8; // Make space for 8 Registers
 
+    // R0-R3, R12 are just set to debug values for now.
+
     sp[0] = 0x00000000; // R0
     sp[1] = 0x01010101; // R1
     sp[2] = 0x02020202; // R2
@@ -66,6 +69,7 @@ uint32_t* init_stack(void (*task_func)(void), uint32_t* stack)
 
     return sp;
 }
+
 SleepController_t* init_sleep_controller()
 {
     SleepController_t* sleep_controller = (SleepController_t*)(alloc(sizeof(SleepController_t)));

@@ -1,5 +1,7 @@
 #include <stdint.h>
-
+#include "kernel/sched.h"
+#include "kernel/os.h"
+#include "kernel/clock.h"
 
 extern uint32_t _start_idata; // Flash
 extern uint32_t _start_data; // RAM
@@ -76,5 +78,6 @@ void HardFault_Handler(void)
 
 void SysTick_Handler(void)
 {
-
+  update_scheduler();
+  ticks++;
 }

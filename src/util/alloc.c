@@ -63,7 +63,7 @@ void* alloc(uint8_t size)
     while (size >> 1 < block_size)
     {
         // Split block if possible
-        if(index = 0)
+        if(index == 0)
             break; 
 
         index--;
@@ -99,6 +99,8 @@ void free(void *ptr)
     LinkedAlloc_t *freed = (LinkedAlloc_t *)block;
     freed->next = alloc_lists[index];
     alloc_lists[index] = freed;
+
+    merge_alloc_blocks_at_index(index);
 }
 
 void merge_alloc_blocks_at_index(uint8_t index)
@@ -116,13 +118,13 @@ void merge_alloc_blocks_at_index(uint8_t index)
     {
         if ((uint8_t*)block + (8 << index) == (uint8_t*)block->next) // Check if two blocks are adjacent in memory
         {
-            if (prev && block->next->next) 
+            if (prev && block->next->next)
             {
                 prev->next = block->next->next;
             }
-            else if(prev)
+            else if(prev && !block->next->next)
             {
-                prev = NULL;
+                prev->next = NULL;
             }
             else 
             {

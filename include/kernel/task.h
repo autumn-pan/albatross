@@ -37,9 +37,6 @@ typedef struct tcb
     uint32_t* stack_base;
     enum TASK_STATE state;
 
-    uint32_t delay;
-    uint8_t id;
-
     SleepController_t* sleep_controller;
 } TaskControlBlock_t;
 
