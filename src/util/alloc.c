@@ -27,8 +27,8 @@ int8_t find_min_block_index(uint8_t size)
             continue;
         }
 
-        // The previous conditional filters out any indices
-        if (size <= 8 << i)
+        // The previous conditional filters out any empty indices
+        if (size <= MIN_BLOCK_SIZE << i)
         {
             return i;
         }
@@ -42,7 +42,7 @@ int8_t find_min_block_index(uint8_t size)
 
 void* alloc(uint8_t size)
 {
-    if (size == 0 || size > MAX_BLOCK_SIZE)
+    if (size < MIN_BLOCK_SIZE || size > MAX_BLOCK_SIZE)
     {
         return NULL;
     }
