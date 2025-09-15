@@ -29,6 +29,7 @@ void remove_priority(uint32_t priority) {
     }
 }
 
+// This is deprecated. Use __clz() instead
 uint32_t count_leading_zeros(uint32_t n)
 {
     if(n == 0)
@@ -91,7 +92,6 @@ void update_scheduler()
     next_tcb = ready_task;
     
     // If the ready task is the last of its priority, write that the priority is now empty in the bitset
-    // This computes in O(n) time but can lead to signicant errors if the bitset is not correctly handled. The alternative is a safe, albeit O(n) algorithm.
     if(ready_queue[highest_priority]->size == 1)
     {
         remove_priority(highest_priority);
