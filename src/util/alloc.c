@@ -69,7 +69,7 @@ void* alloc(uint8_t size)
         index--;
 
         // Split the block and push it to the new free list
-        LinkedAlloc_t *new_block = (LinkedAlloc_t *)((uint8_t *)block + (2 << index));
+        LinkedAlloc_t *new_block = (LinkedAlloc_t *)((uint8_t *)block + (1 << index));
         new_block->next = alloc_lists[index];
         alloc_lists[index] = new_block;
 
