@@ -83,7 +83,7 @@ void free(void *ptr)
 {
     if (ptr == NULL)
     {
-        return; // Nothing to `free
+        return; // Nothin1g to `free
     }
 
     // Calculate the block's index based on its size
@@ -102,14 +102,13 @@ void free(void *ptr)
 
     merge_alloc_blocks_at_index(index);
 }
-
 void merge_alloc_blocks_at_index(uint8_t index)
 {
     // Get last block
     LinkedAlloc_t *block = alloc_lists[index];
 
     // If there's nothing to merge, return
-    if (!block->next)
+    if (!block || !block->next)
         return;
 
     LinkedAlloc_t* prev = NULL;
@@ -118,27 +117,35 @@ void merge_alloc_blocks_at_index(uint8_t index)
     {
         if ((uint8_t*)block + (8 << index) == (uint8_t*)block->next) // Check if two blocks are adjacent in memory
         {
-            if (prev && block->next->next)
+            // Merge the blocks
+            block->next = block->next->next;
+
+            // Promote the merged block to the next list
+            LinkedAlloc_t *merged = block;
+            merged->next = alloc_lists[index + 1];
+            alloc_lists[index + 1] = merged;
+
+            // If `prev` exists, link it to the next block
+            if (prev)
             {
-                prev->next = block->next->next;
+                prev->next = block->next;
             }
-            else if(prev && !block->next->next)
+            else
             {
-                prev->next = NULL;
+                alloc_lists[index] = block->next;
             }
-            else 
-            {
-                alloc_lists[index] = block->next->next;
-            }
-            break;
+
+            // Continue merging from the next block
+            block = alloc_lists[index];
+        }
+        else
+        {
+            // Move to the next block
+            prev = block;
+            block = block->next;
         }
     }
-
-    LinkedAlloc_t *merged = block;
-    merged->next = alloc_lists[index + 1];
-    alloc_lists[index + 1] = merged;
 }
-
 
 // Set all bytes in some range in memory to some particular value
 void* memset(void* ptr, uint8_t value, size_t size)
