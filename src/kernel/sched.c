@@ -25,26 +25,8 @@ void add_priority(uint32_t priority) {
 // Set any bit to 0
 void remove_priority(uint32_t priority) {
     if (priority < 32) {
-        ready_bitset &= (0U << priority); 
+        ready_bitset &= ~(1U << priority); 
     }
-}
-
-// This is deprecated. Use __clz() instead
-uint32_t count_leading_zeros(uint32_t n)
-{
-    if(n == 0)
-        return 32;
-    uint32_t count = 0;
-
-    while(1)
-    {
-        if(n & 0x80000000)
-            break;
-        count++;
-        n <<= 1;
-    }
-
-    return count;
 }
 
 // FInd the highest priority ready task
@@ -54,7 +36,7 @@ int8_t get_highest_priority()
         return -1; 
     }
 
-    return count_leading_zeros(ready_bitset);
+    return __clz(ready_bitset);
 }
 
 // Triggers PendSV
@@ -75,7 +57,7 @@ void update_scheduler()
 
     int8_t highest_priority = get_highest_priority();
     // Check if there are any ready tasks
-    if(highest_priority == -1)
+    if(highest_priority == -1 || !ready_queue[highest_priority]->head)
     {
         // If there is no running task either, do nothing
         if(!running)

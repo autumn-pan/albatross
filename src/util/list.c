@@ -54,9 +54,8 @@ void list_append(List_t * list, ListNode_t* node)
     }
     else if(list->tail == NULL) // Second insertion
     {
-        list->tail = list->head;
-        list->head = node;
-        node->next = list->tail;
+        list->tail = node;
+        list->head->next = list->tail;
     }
     else // Any subsequent insertion
     {
@@ -109,6 +108,5 @@ int8_t find_node_index(List_t* list, ListNode_t* node)
         index++;
     }
 
-    free(tmp);
     return index;
 }
