@@ -1,9 +1,9 @@
-#include "util/list.h"
+#include "list.h"
 
 #include <stddef.h>
 #include <stdint.h>
-#include "util/list.h"
-#include "util/alloc.h"
+#include "list.h"
+#include "alloc.h"
 
 void init_list(List_t* list)
 {
@@ -18,51 +18,33 @@ ListNode_t* create_node(void* value)
 
     node->value = value;
     node->next = NULL;
+
     return node;
 }
 
 // Push a node to the front of a linked list
 void list_push(List_t* list, ListNode_t* node)
 {
-    if(list->head == NULL) // First insertion
-    {
-        list->head = node;
-    }
-    else if(list->tail == NULL) // Second insertion
-    {
-        list->tail = list->head;
-        list->head = node;
-        node->next = list->tail;
-    }
-    else // Any subsequent insertion
-    {
-        node->next = list->head;
-        list->head = node;
-    }
+    node->next = list->head;
+    list->head = node;
 
-    // Track list size
+    if(list->tail == NULL) 
+        list->tail = node;
+
     list->size++;
 }
 
 
 void list_append(List_t * list, ListNode_t* node)
 {
-    if(list->head == NULL) // First insertion
-    {
+    node->next = NULL;
+    if (list->head == NULL) { // Empty list
         list->head = node;
         list->tail = node;
-    }
-    else if(list->tail == NULL) // Second insertion
-    {
-        list->tail = node;
-        list->head->next = list->tail;
-    }
-    else // Any subsequent insertion
-    {
+    } else {
         list->tail->next = node;
         list->tail = node;
     }
-
     // Track list size
     list->size++;
 }
@@ -70,9 +52,19 @@ void list_append(List_t * list, ListNode_t* node)
 // Destroy the first node of some list
 void list_pop_head(List_t* list)
 {
-    ListNode_t* tmp = list->head->next;
-    free(list->head);
-    list->head = tmp;
+    if(!list->head) 
+        return;
+
+    if(list->head->next)
+    {
+        list->head = list->head->next;
+    }
+    else
+    {
+        list->head = NULL;
+        list->tail = NULL;
+    }
+    
     list->size--;
 }
 
