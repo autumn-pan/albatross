@@ -1,7 +1,7 @@
 #include "kernel/sched.h"
 #include "util/list.h"
 
-uint32_t ready_bitset;
+uint32_t ready_bitset = 0;
 List_t* ready_queue[MAX_PRIORITIES];
 List_t* sleeping;
 TaskControlBlock_t* running;
@@ -31,14 +31,14 @@ uint8_t __clz(uint32_t x)
 
 void add_priority(uint32_t priority) {
     if (priority < 32) {
-        ready_bitset |= (1U << priority); 
+        ready_bitset |= (1U << (31 - priority)); 
     }
 }
 
 // Set any bit to 0
 void remove_priority(uint32_t priority) {
     if (priority < 32) {
-        ready_bitset &= ~(1U << priority); 
+        ready_bitset &= ~(1U << (31 - priority)); 
     }
 }
 
@@ -58,42 +58,38 @@ void switch_context()
     SCB_ICSR |= SCB_ICSR_PENDSVSET_Msk;
 }
 
-TaskControlBlock_t* next_task()
+void init_scheduler()
 {
-    return ready_queue[get_highest_priority()]->head->value;
+    for(int i = 0; i < MAX_PRIORITIES; i++)
+    {
+        ready_queue[i] = (List_t*)(malloc(sizeof(List_t)));
+        init_list(ready_queue[i]);
+    }
 }
 
 void update_scheduler()
 {
     // Before anything, check if any sleeping tasks are ready to wake up and manage them
-    update_sleep_handlers();
-
     int8_t highest_priority = get_highest_priority();
-    // Check if there are any ready tasks
-    if(highest_priority == -1 || !ready_queue[highest_priority]->head)
-    {
-        // If there is no running task either, do nothing
-        if(!running)
-        {
-            __asm__ volatile("wfi");
-        }    
 
-        // In either case, return early
+    if(highest_priority == -1)
+    {
         return;
     }
 
-    // If there is at least one ready task, this code will execute
-    TaskControlBlock_t* ready_task = ready_queue[highest_priority]->head->value;
+    List_t* list = ready_queue[highest_priority];
+
+    TaskControlBlock_t* ready_task = (TaskControlBlock_t*)list->head->value;
     next_tcb = ready_task;
-    
-    // If the ready task is the last of its priority, write that the priority is now empty in the bitset
-    if(ready_queue[highest_priority]->size == 1)
-    {
-        remove_priority(highest_priority);
-    }
 
     ready_task->state = RUNNING;
-    list_pop_head(ready_queue[highest_priority]);
+
+    list_pop_head(list);
+    
+    if(!list->head)
+        remove_priority(highest_priority);
+
+
 
     // If there is currently a running task, move it to READY queue instead
     if(running)
@@ -109,6 +105,9 @@ void update_scheduler()
 
     // Mark the ready task as the current running task
     running = ready_task;
+
+
+    running->task_func();
     current_tcb = ready_task;
 }
 
@@ -118,11 +117,8 @@ void update_sleep_handlers()
 {
     ListNode_t* current = sleeping->head;
 
-    while(1)
+    while(current)
     {
-        // If there is no task to check for whatever reason, return
-        if(!current)
-            return;
         // Update remaining time
         ((TaskControlBlock_t*)current->value)->sleep_controller->remaining_time--;
 
@@ -142,10 +138,8 @@ void add_task(TaskControlBlock_t* tcb)
 {
     list_append(ready_queue[tcb->priority], tcb->node);
 
-    if(ready_queue[tcb->priority]->size == 1)
-    {
-        add_priority(tcb->priority);
-    }
+
+    add_priority(tcb->priority);
 }
 
 void sleep(uint32_t time)
@@ -158,7 +152,7 @@ void sleep(uint32_t time)
     SleepController_t* controller = running->sleep_controller;
 
     controller->asleep = true;
-    controller->init_time = ticks;
+    controller->init_time = 0;
     controller->sleep_time = time;
     controller->remaining_time = time;
     running->state = SLEEPING;
@@ -170,14 +164,8 @@ void sleep(uint32_t time)
 void yield()
 {
     list_append(ready_queue[running->priority], running->node);
-    running->state = READY;
+    add_priority(running->priority);
 
-    if(ready_queue[running->priority]->size == 1)
-    {
-        add_priority(running->priority);
-    }
     running = NULL;
-
-
-    __asm__ volatile("wfi");
+    // wfi
 }
