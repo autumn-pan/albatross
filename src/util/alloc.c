@@ -1,8 +1,9 @@
-#include "util/alloc.h"
+#include "alloc.h"
 
 // Set initial values of each memory allocation list
 void init_alloc()
 {
+
     for (int i = 0; i < NUM_ALLOC_LISTS; i++)
     {
         alloc_lists[i] = NULL;
@@ -42,6 +43,7 @@ int8_t find_min_block_index(uint8_t size)
 
 void* alloc(uint8_t size)
 {
+
     if (size < MIN_BLOCK_SIZE || size > MAX_BLOCK_SIZE)
     {
         return NULL;
@@ -60,6 +62,8 @@ void* alloc(uint8_t size)
     uint32_t block_size = 8 << index;
 
     // Check if the required size is less than half the size of the block
+
+
     while (size >> 1 < block_size)
     {
         // Split block if possible
@@ -68,15 +72,18 @@ void* alloc(uint8_t size)
 
         index--;
 
+
         // Split the block and push it to the new free list
-        LinkedAlloc_t *new_block = (LinkedAlloc_t *)((uint8_t *)block + (1 << index));
+        LinkedAlloc_t *new_block = (LinkedAlloc_t *)((uint8_t *)block + (MIN_BLOCK_SIZE << index));
         new_block->next = alloc_lists[index];
         alloc_lists[index] = new_block;
 
         block_size = 8 << index;
     }
 
-    return (void *)block;
+
+
+    return (void*)block;
 }
 
 void free(void *ptr)
@@ -148,7 +155,7 @@ void merge_alloc_blocks_at_index(uint8_t index)
 }
 
 // Set all bytes in some range in memory to some particular value
-void* memset(void* ptr, uint8_t value, size_t size)
+void* mem_set(void* ptr, uint8_t value, size_t size)
 {
     uint8_t* p = (uint8_t*)ptr;
 

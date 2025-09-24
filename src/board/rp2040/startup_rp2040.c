@@ -13,8 +13,8 @@ extern uint32_t _initial_sp;
 extern void bss_zero(void);
 extern void cp_flash(void);
 
-uint8_t* current_tcb;
-uint8_t* next_tcb;
+extern void* current_tcb;
+extern void* next_tcb;
 
 extern int main(void);
 
@@ -78,6 +78,5 @@ void HardFault_Handler(void)
 
 void SysTick_Handler(void)
 {
-  update_scheduler();
   ticks++;
 }

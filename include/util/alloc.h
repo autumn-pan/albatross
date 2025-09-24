@@ -23,6 +23,7 @@ void init_alloc();
 void* alloc(uint8_t size);
 void free(void *ptr);
 void* memset(void* ptr, uint8_t value, size_t size);
+void merge_alloc_blocks_at_index(uint8_t index);
 void update_sleep_handlers();
 
 #endif
