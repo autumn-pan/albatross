@@ -142,7 +142,7 @@ void merge_alloc_blocks_at_index(uint8_t index)
                 alloc_lists[index] = block->next;
             }
 
-            // Continue merging from the next block
+            // Continue merging from  next block
             block = alloc_lists[index];
         }
         else
@@ -153,6 +153,7 @@ void merge_alloc_blocks_at_index(uint8_t index)
         }
     }
 }
+
 
 // Set all bytes in some range in memory to some particular value
 void* mem_set(void* ptr, uint8_t value, size_t size)

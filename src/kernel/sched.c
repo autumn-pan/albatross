@@ -74,6 +74,7 @@ void update_scheduler()
 
     if(highest_priority == -1)
     {
+        __asm__("wfi");
         return;
     }
 
@@ -167,5 +168,5 @@ void yield()
     add_priority(running->priority);
 
     running = NULL;
-    // wfi
+    __asm__("wfi");
 }
