@@ -5,3 +5,5 @@ ALBATROSS was made over the span of a few weeks. I made it because I wanted a sy
 The RP2040 is a common processor, but I understand that whoever is reviewing this probably doesn't own one. This code was written partially in c, and partially in assembly. I encourage you to run the demo on `https://github.com/autumn-pan/albatross-std`, since it is significantly more accessable than this highly specialized software.
 
 The biggest challenge was recreating everything from scratch. I had to write my own drivers, and was given very little information to work with a debug with from the device. It taught me a lot about hardware and device tree, though.
+
+[![Athena Award Badge](https://img.shields.io/endpoint?url=https%3A%2F%2Faward.athena.hackclub.com%2Fapi%2Fbadge)](https://award.athena.hackclub.com?utm_source=readme)
