@@ -4,8 +4,8 @@
 uint32_t ready_bitset = 0;
 List_t* ready_queue[MAX_PRIORITIES];
 List_t* sleeping;
-TaskControlBlock_t* running;
 
+TaskControlBlock_t* running;
 TaskControlBlock_t* current_context;
 
 void *current_tcb;
