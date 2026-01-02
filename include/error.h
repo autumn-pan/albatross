@@ -7,5 +7,4 @@ typedef enum {
   RET_ERR_ALLOC,
   RET_ERR_OTHER
 } Status_t;
-
 #endif

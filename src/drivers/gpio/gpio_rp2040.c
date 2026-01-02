@@ -25,4 +25,5 @@ void alba_gpio_init_pin(size_t pin) {
     GPIO_OE_SET |= 1 << pin;
 }
 
+
 #endif
