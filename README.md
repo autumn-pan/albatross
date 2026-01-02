@@ -1,5 +1,9 @@
-ALBATROSS RTOS is a Real-Time Operating system designed with rocketry and avionics systems in mind. It is currently early in development and is a solo project.
+ALBATROSS RTOS is a Real-Time Operating system designed with rocketry and avionics systems in mind. It is currently early in development. It can register and run tasks at deterministic intervals and meet strict timing requirements. It also comes with its own memory allocator.
 
-ALBATROSS is planned to utilize Preemptive multitasking, however early versions are planned to use cooperative multitasking for simplicity. 
+ALBATROSS was made over the span of a few weeks. I made it because I wanted a system to base my Polaris family of flight computers on, and FreeRTOS wasn't modular enough, and Zephyr was too overkill for this project. So, I decided to make my own. This was a very difficult project. I spent a lot of time debugging it. It targets ARM Cortex-m0+, more specifically the rp2040 cpu, with the Raspberry Pi Pico W development board. 
 
-ALBATROSS is currently designed to be run on the ARM Cortex-m0+ processor, however is planned to be expanded to all major processors of the ARM Cortex-m family.
+The RP2040 is a common processor, but I understand that whoever is reviewing this probably doesn't own one. This code was written partially in c, and partially in assembly. I encourage you to run the demo on `https://github.com/autumn-pan/albatross-std`, since it is significantly more accessable than this highly specialized software.
+
+The biggest challenge was recreating everything from scratch. I had to write my own drivers, and was given very little information to work with a debug with from the device. It taught me a lot about hardware and device tree, though.
+
+[![Athena Award Badge](https://img.shields.io/endpoint?url=https%3A%2F%2Faward.athena.hackclub.com%2Fapi%2Fbadge)](https://award.athena.hackclub.com?utm_source=readme)
