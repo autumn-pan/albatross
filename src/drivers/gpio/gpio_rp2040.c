@@ -14,6 +14,7 @@
 #define GPIO_OE_SET *(uint32_t *) (0xd0000024)
 #define SIO_BASE *(uint32_t *) (0xd0000000)
 #define GPIO_OUT_SET *(uint32_t *) (0xd0000014)
+#define GPIO_IN *(uint32_t *) (0xd0000004)
 
 Status_t alba_gpio_init_pin(size_t pin) {
     if(pin > NUM_GPIO || pin < MIN_GPIO) {
@@ -42,6 +43,14 @@ Status_t alba_gpio_set_pin(size_t pin, GPIO_STATE state) {
         return RET_ERR_PARAMS;
 
     return RET_SUCCESS
+}
+
+GPIO_STATE alba_gpio_read_pin(size_t pin) {
+    if (pin < MIN_GPIO || pin > NUM_GPIO) {
+        return RET_ERR_PARAMS
+    }
+
+    return (GPIO_IN >> pin) & 1U;
 }
 
 #endif
