@@ -79,18 +79,13 @@ void update_scheduler()
     }
 
     List_t* list = ready_queue[highest_priority];
-
     TaskControlBlock_t* ready_task = (TaskControlBlock_t*)list->head->value;
     next_tcb = ready_task;
-
     ready_task->state = RUNNING;
 
     list_pop_head(list);
-    
     if(!list->head)
         remove_priority(highest_priority);
-
-
 
     // If there is currently a running task, move it to READY queue instead
     if(running)
@@ -106,7 +101,6 @@ void update_scheduler()
 
     // Mark the ready task as the current running task
     running = ready_task;
-
 
     running->task_func();
     current_tcb = ready_task;
